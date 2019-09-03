@@ -23,7 +23,7 @@ const ThresholdCheck = ({ action, amount }) => {
     <form className="container" noValidate autoComplete="off">
       <TextField
         id="newThreshold"
-        label="New Threshold"
+        label="Alert threshold"
         className="textField"
         value={values.level}
         onChange={handleChange('level')}

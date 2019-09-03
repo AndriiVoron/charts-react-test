@@ -2,62 +2,59 @@ import ReactEcharts from 'echarts-for-react';
 import PropTypes from 'prop-types';
 import React from 'react';
 
+const getDataSeriesBar = data => {
+  // const result = data.map( item => {
+  //   const date = new Date(item.timestamp);
+  //   return `${date.getHours()}h ${date.getMinutes()}m ${date.getSeconds()}s`;
+  // });
+  // return result;
+  return [1, 10, 4, 6, 3, 9, 2];
+};
+
 const getOption = (data, lineName) => ({
-  legend: {
-    show: false,
-    data: [{ name: lineName }],
-    top: 5,
+  title: {
+    text: lineName,
+    left: 'center',
+    top: 20,
+    color: '#fff',
   },
   grid: {
-    left: '3%',
+    left: 20,
     right: 20,
-    top: 30,
+    top: 50,
     bottom: 10,
     containLabel: true,
   },
-  // legend: {
-  //   top: 25,
-  // },
-  // title: {
-  //   text: Utils.getTitle(data),
-  //   left: 'center',
-  //   top: 10,
-  // },
-  // tooltip: {
-  //   trigger: 'axis',
-  //   axisPointer: {
-  //     type: 'shadow',
-  //   },
-  // },
-  // xAxis: {
-  //   type: 'category',
-  //   data: Utils.getXAxis(data, 'suppliers'),
-  //   axisTick: {
-  //     alignWithLabel: true,
-  //   },
-  //   axisLabel: { rotate: 40, interval: 0 },
-  // },
-  // yAxis: {
-  //   type: 'value',
-  //   axisLabel: {
-  //     formatter: Utils.formatYAxis,
-  //   },
-  // },
-  // dataset: {
-  //   dimensions: Utils.getDimension(data),
-  //   source,
-  // },
-  // series: Utils.getDataSeriesBar(data),
+  tooltip: {
+    formatter: '{c}',
+    axisPointer: {
+      type: 'cross',
+      label: {
+        backgroundColor: '#6a7985',
+      },
+    },
+  },
   xAxis: {
-      type: 'category',
-      data: ['-10 - 0', '0 - 10', '10 - 20', '20 - 30', '30 - 40', '40 - 50', '50 - 60']
+    type: 'category',
+    axisLabel: {
+      margin: 15,
+      color: '#ddd',
+    },
+    data: ['-10 - 0', '0 - 10', '10 - 20', '20 - 30', '30 - 40', '40 - 50', '50 - 60']
   },
   yAxis: {
-      type: 'value'
+    type: 'value',
+    nameTextStyle: {
+      fontSize: 12,
+      fontWeight: 'bold',
+    },
+    axisLabel: {
+      color: '#ddd',
+    },
   },
   series: [{
-      data: [120, 200, 150, 80, 70, 110, 130],
-      type: 'bar'
+    data: getDataSeriesBar(data),
+    type: 'bar'
   }]
 });
 
@@ -69,7 +66,7 @@ const BarChart = ({
     <ReactEcharts
       option={getOption(data, lineName)}
       opts={{ renderer: 'svg' }}
-      style={{ width: '100%', height: '400px' }}
+      style={{ width: '100%', height: '400px', marginTop: '30px' }}
     />
   ) : (
     <h3> DATA LOADING </h3>
@@ -78,12 +75,11 @@ const BarChart = ({
 
 BarChart.defaultProps = {
   lineName: 'Total',
-  data: [820, 932, 901, 934, 1290, 1330, 1320],
+  data: [],
 };
 
 BarChart.propTypes = {
-  // data: PropTypes.shape([]),
-  data: PropTypes.array,
+  data: PropTypes.arrayOf(PropTypes.shape({})),
   lineName: PropTypes.string,
 };  
 
