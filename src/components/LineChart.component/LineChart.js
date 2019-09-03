@@ -10,7 +10,7 @@ const getSeriesXValue = data => {
   return result;
 };
 
-const getSeriesYValue = data => data.map( item => item.value);
+const getSeriesYValue = data => data.map( item => item.value.toFixed(3));
 
 const getOption = (data, lineName) => ({
   title: {
