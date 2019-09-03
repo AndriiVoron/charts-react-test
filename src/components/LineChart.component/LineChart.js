@@ -3,17 +3,20 @@ import PropTypes from 'prop-types';
 import ReactEcharts from 'echarts-for-react';
 
 const getSeriesXValue = data => {
-  // Object.keys(data || {}).reverse();
-  const result = data.map( item => item.timestamp);
+  const result = data.map( item => {
+    const date = new Date(item.timestamp);
+    return `${date.getHours()}h ${date.getMinutes()}m ${date.getSeconds()}s`;
+  });
+  return result;
 };
 
-const getSeriesYValue = data => Object.values(data || {}).reverse();
+const getSeriesYValue = data => data.map( item => item.value);
 
 const getOption = (data, lineName) => ({
   title: {
     text: lineName,
     left: 'center',
-    top: 10,
+    top: 20,
     color: '#fff',
   },
   grid: {
@@ -24,7 +27,7 @@ const getOption = (data, lineName) => ({
     containLabel: true,
   },
   tooltip: {
-    trigger: 'axis',
+    formatter: '{b}<br />{c}',
     axisPointer: {
       type: 'cross',
       label: {
@@ -32,27 +35,13 @@ const getOption = (data, lineName) => ({
       },
     },
   },
-  // xAxis: [
-  //   {
-  //     type: 'category',
-  //     splitLine: {
-  //       show: false,
-  //     },
-  //     boundaryGap: false,
-  //     data: getSeriesXValue(state),
-  //   },
-  // ],
   xAxis: {
-    // type: 'category',
-    type: 'time',
-    splitLine: {
-        show: false
-    },
+    type: 'category',
     axisLabel: {
       margin: 15,
-      color: '#fff',
+      color: '#ddd',
     },
-    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+    data: getSeriesXValue(data),
   },
   yAxis: {
     type: 'value',
@@ -61,19 +50,11 @@ const getOption = (data, lineName) => ({
       fontWeight: 'bold',
     },
     axisLabel: {
-      color: '#fff',
+      color: '#ddd',
     },
   },
-  // series: [
-  //   {
-  //     name: lineName,
-  //     type: 'line',
-  //     smooth: true,
-  //     data: getSeriesYValue(state),
-  //   },
-  // ],
   series: [{
-      data,
+      data: getSeriesYValue(data),
       type: 'line'
   }]
 });
@@ -86,7 +67,7 @@ const LineChart = ({
     <ReactEcharts
       option={getOption(data, lineName)}
       opts={{ renderer: 'svg' }}
-      style={{ width: '100%', height: '400px' }}
+      style={{ width: '100%', height: '400px', marginTop: '30px' }}
     />
   ) : (
     <h3> DATA LOADING </h3>
@@ -94,13 +75,12 @@ const LineChart = ({
 };
 
 LineChart.defaultProps = {
-  lineName: 'Total',
-  data: [820, 932, 901, 934, 1290, 1330, 1320],
+  lineName: 'Total line',
+  data: [],
 };
 
 LineChart.propTypes = {
-  // data: PropTypes.shape([]),
-  data: PropTypes.array,
+  data: PropTypes.arrayOf(PropTypes.shape({})),
   lineName: PropTypes.string,
 };
 
