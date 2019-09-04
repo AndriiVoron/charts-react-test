@@ -2,23 +2,15 @@ import ReactEcharts from 'echarts-for-react';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-const getDataSeriesBar = data => {
-  const unordered =  data.reduce( (obj, item) => {
-    const preKey = item.value - item.value%10;
-    const key = `${preKey} - ${preKey + 10}`;
-    obj[key] = obj[key] ? obj[key] + 1 : 1;
-    return obj;
-  }, {});
-
-  return Object.keys(unordered).sort().reduce(
-    (rez, key) => {rez[key] = unordered[key]; return rez}, {}
-  );
-  // return ordered;
+const getSeriesXValue = data => {
+  const result = data.map( item => {
+    const { range } = item;
+    return `${range.from} : ${range.to}`;
+  });
+  return result;
 };
 
-const getSeriesXValue = data => Object.keys(data || []);
-
-const getSeriesYValue = data => Object.values(data || []);
+const getSeriesYValue = data => data.map( item => item.count);
 
 const getOption = (data, lineName) => ({
   title: {
@@ -71,10 +63,9 @@ const BarChart = ({
   data,
   lineName,
 }) => {
-  const preparedData = getDataSeriesBar(data);
   return data.length > 0 ? (
     <ReactEcharts
-      option={getOption(preparedData, lineName)}
+      option={getOption(data, lineName)}
       opts={{ renderer: 'svg' }}
       style={{ width: '100%', height: '400px', marginTop: '30px' }}
     />
