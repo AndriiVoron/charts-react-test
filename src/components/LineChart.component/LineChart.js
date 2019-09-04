@@ -63,7 +63,7 @@ const LineChart = ({
   data,
   lineName,
 }) => {
-  return data ? (
+  return data.length > 0 ? (
     <ReactEcharts
       option={getOption(data, lineName)}
       opts={{ renderer: 'svg' }}

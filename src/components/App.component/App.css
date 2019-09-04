@@ -24,6 +24,7 @@
 
 .App-main {
   background-color: #585c64;
+  min-height: calc(100vh - 70px);
   padding: 20px;
   display: flex;
   flex-direction: column;

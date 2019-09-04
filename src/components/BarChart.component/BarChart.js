@@ -3,13 +3,22 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 const getDataSeriesBar = data => {
-  // const result = data.map( item => {
-  //   const date = new Date(item.timestamp);
-  //   return `${date.getHours()}h ${date.getMinutes()}m ${date.getSeconds()}s`;
-  // });
-  // return result;
-  return [1, 10, 4, 6, 3, 9, 2];
+  const unordered =  data.reduce( (obj, item) => {
+    const preKey = item.value - item.value%10;
+    const key = `${preKey} - ${preKey + 10}`;
+    obj[key] = obj[key] ? obj[key] + 1 : 1;
+    return obj;
+  }, {});
+
+  return Object.keys(unordered).sort().reduce(
+    (rez, key) => {rez[key] = unordered[key]; return rez}, {}
+  );
+  // return ordered;
 };
+
+const getSeriesXValue = data => Object.keys(data || []);
+
+const getSeriesYValue = data => Object.values(data || []);
 
 const getOption = (data, lineName) => ({
   title: {
@@ -40,7 +49,7 @@ const getOption = (data, lineName) => ({
       margin: 15,
       color: '#ddd',
     },
-    data: ['-10 - 0', '0 - 10', '10 - 20', '20 - 30', '30 - 40', '40 - 50', '50 - 60']
+    data: getSeriesXValue(data)
   },
   yAxis: {
     type: 'value',
@@ -53,7 +62,7 @@ const getOption = (data, lineName) => ({
     },
   },
   series: [{
-    data: getDataSeriesBar(data),
+    data: getSeriesYValue(data),
     type: 'bar'
   }]
 });
@@ -62,9 +71,10 @@ const BarChart = ({
   data,
   lineName,
 }) => {
-  return data ? (
+  const preparedData = getDataSeriesBar(data);
+  return data.length > 0 ? (
     <ReactEcharts
-      option={getOption(data, lineName)}
+      option={getOption(preparedData, lineName)}
       opts={{ renderer: 'svg' }}
       style={{ width: '100%', height: '400px', marginTop: '30px' }}
     />
@@ -74,7 +84,7 @@ const BarChart = ({
 };
 
 BarChart.defaultProps = {
-  lineName: 'Total',
+  lineName: 'Category group',
   data: [],
 };
 
