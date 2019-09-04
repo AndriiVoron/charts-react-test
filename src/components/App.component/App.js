@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { subscribeToData } from '../../services/api.services'
 import { setThreshold } from '../../actions/threshold.actions';
-import { getChartsData, successData, failureData } from '../../actions/charts.actions';
+import { requestData,} from '../../actions/charts.actions';
 import logo from '../../images/logo.svg';
 import './App.css';
 import Grid from '@material-ui/core/Grid';
@@ -12,13 +11,8 @@ import LineChart from '../LineChart.component/LineChart';
 import BarChart from '../BarChart.component/BarChart';
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-    subscribeToData(this.props.getData, this.props.getErrorData);
-  }
-
-  componentDidMount() {   
-    this.props.getChartsData({ socket: this.socket }); 
+  componentDidMount() {
+    this.props.startFetchingData();
   }
 
   render() {
@@ -61,9 +55,7 @@ class App extends Component {
 const mapDispatchToProps = (dispatch) => {
   return {
     counterAdd: (data) => dispatch(setThreshold(data)),
-    getData: (data) => dispatch(successData(data)),
-    getErrorData: (err) => dispatch(failureData(err)),
-    getChartsData: (options) => dispatch(getChartsData(options)),
+    startFetchingData: () => dispatch(requestData()),
   };
 };
 const mapStateToProps = (store) => {
