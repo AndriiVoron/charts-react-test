@@ -24,6 +24,7 @@
 
 .App-main {
   background-color: #585c64;
+  position: relative;
   min-height: calc(100vh - 70px);
   padding: 20px;
   display: flex;
@@ -34,6 +35,17 @@
   font-size: calc(10px + 2vmin);
   color: white;
   box-sizing: border-box;
+}
+
+.App-alert-block{
+  background-color: red;
+  font-size: 10px;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 4px;
+  position: absolute;
+  left: 5px;
+  top: 80px;
 }
 
 

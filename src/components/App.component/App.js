@@ -10,6 +10,10 @@ import ThresholdForm from '../ThresholdForm.component/ThresholdForm';
 import LineChart from '../LineChart.component/LineChart';
 import BarChart from '../BarChart.component/BarChart';
 
+function checkthreshold(curentState, newState){
+  if (curentState === 'unset') return false;
+  return newState > curentState;
+}
 class App extends Component {
   componentDidMount() {
     this.props.startFetchingData();
@@ -17,10 +21,14 @@ class App extends Component {
 
   render() {
     const {
-      chartsData,
+      data,
+      barData,
       threshold,
-      counterAdd,
+      lastPaylod,
+      getThreshold,
     } = this.props;
+    const showNewData = checkthreshold(threshold, lastPaylod); 
+    
     return (
       <div className="App">
         <header className="App-header">
@@ -33,19 +41,24 @@ class App extends Component {
           <Grid container spacing={8}>
             <Grid item xs={12} md={9} lg={8}>
               <ThresholdForm
-                action={counterAdd}
+                action={getThreshold}
                 amount={threshold}
               />
             </Grid>
           </Grid>
           <Grid container spacing={8}>
             <Grid item xs={12} md={12} lg={6}>
-              <LineChart data={chartsData} />
+              <LineChart data={data} />
             </Grid>
             <Grid item xs={12} md={12} lg={6}>
-              <BarChart data={chartsData} />
+              <BarChart data={barData} />
             </Grid>
           </Grid>
+          {
+            showNewData ?
+            (<div className="App-alert-block">payload is {lastPaylod}</div>)
+            : null
+          }
         </main>
       </div>
     );
@@ -54,14 +67,17 @@ class App extends Component {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    counterAdd: (data) => dispatch(setThreshold(data)),
+    getThreshold: (data) => dispatch(setThreshold(data)),
     startFetchingData: () => dispatch(requestData()),
   };
 };
 const mapStateToProps = (store) => {
   const { chartsState, thresholdState } = store;
+  const { lastPaylod } = chartsState;
   return {
-    chartsData: chartsState.data,
+    data: chartsState.data,
+    barData: chartsState.barData,
+    lastPaylod: lastPaylod !== null ? lastPaylod.value : 'loading',
     threshold: thresholdState.threshold,
   };
 };
