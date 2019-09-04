@@ -21,7 +21,8 @@ class App extends Component {
 
   render() {
     const {
-      data,
+      
+      lineData,
       barData,
       threshold,
       lastPaylod,
@@ -48,7 +49,7 @@ class App extends Component {
           </Grid>
           <Grid container spacing={8}>
             <Grid item xs={12} md={12} lg={6}>
-              <LineChart data={data} />
+              <LineChart data={lineData} />
             </Grid>
             <Grid item xs={12} md={12} lg={6}>
               <BarChart data={barData} />
@@ -75,7 +76,7 @@ const mapStateToProps = (store) => {
   const { chartsState, thresholdState } = store;
   const { lastPaylod } = chartsState;
   return {
-    data: chartsState.data,
+    lineData: chartsState.lineData,
     barData: chartsState.barData,
     lastPaylod: lastPaylod !== null ? lastPaylod.value : 'loading',
     threshold: thresholdState.threshold,

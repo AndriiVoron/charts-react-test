@@ -45,7 +45,11 @@ export function chartsReducer(state = initialState, action) {
 };
 
 function prepareLine(actualState, newElement){
-  return [...actualState, newElement];
+  if (actualState.length < 10) {
+    return [...actualState, newElement];
+  }
+  const sliceArr = actualState.slice(1);
+  return [...sliceArr, newElement];
 }
 
 function prepareBar(actualState, newElement){
