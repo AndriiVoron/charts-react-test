@@ -1,6 +1,7 @@
-import ReactEcharts from 'echarts-for-react';
-import PropTypes from 'prop-types';
 import React from 'react';
+import PropTypes from 'prop-types';
+import ReactEcharts from 'echarts-for-react';
+import getChartSerie from '../../helpers/getChartSerie';
 
 const getSeriesXValue = data => {
   const result = data.map( item => {
@@ -10,7 +11,7 @@ const getSeriesXValue = data => {
   return result;
 };
 
-const getSeriesYValue = data => data.map( item => item.count);
+const getSeriesYValue = data => getChartSerie(data, 'count');
 
 const getOption = (data, lineName) => ({
   title: {

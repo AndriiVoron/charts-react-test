@@ -1,16 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactEcharts from 'echarts-for-react';
+import getChartSerie from '../../helpers/getChartSerie';
 
-const getSeriesXValue = data => {
-  const result = data.map( item => {
-    const date = new Date(item.timestamp);
-    return `${date.getHours()}h ${date.getMinutes()}m ${date.getSeconds()}s`;
-  });
-  return result;
-};
-
-const getSeriesYValue = data => data.map( item => item.value.toFixed(3));
+const getSeriesXValue = data => getChartSerie(data, 'timestamp');
+const getSeriesYValue = data => getChartSerie(data, 'value');
 
 const getOption = (data, lineName) => ({
   title: {
@@ -39,6 +33,7 @@ const getOption = (data, lineName) => ({
     type: 'category',
     axisLabel: {
       margin: 15,
+      rotate: 45,
       color: '#ddd',
     },
     data: getSeriesXValue(data),
